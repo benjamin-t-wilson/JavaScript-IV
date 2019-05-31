@@ -56,7 +56,19 @@ class Instructor extends Person {
     return `Today we are learning about ${subj}.`;
   }
   grade(stud, subj) {
-    return `${stud} receives a perfect score on ${subj}.`;
+    return `${stud.name} receives a perfect score on ${subj}.`;
+  }
+  gradeAssignment(stud) {
+    let valassign = Math.random();
+    if (valassign > 0.5) {
+      let poschange = Math.floor(Math.random() * 10);
+      stud.grade += poschange;
+      return `${stud.name}'s has gone up by ${poschange} points! It is now ${stud.grade}.`;
+    } else {
+      let negchange = Math.floor(Math.random() * -10);
+      stud.grade += negchange;
+      return `${stud.name}'s has gone down by ${negchange} points! It is now ${stud.grade}.`;
+    }
   }
 }
 
@@ -77,11 +89,12 @@ class Student extends Person {
     super(stuff);
     (this.previousBackground = stuff.previousBackground),
       (this.className = stuff.className),
+      (this.grade = stuff.grade),
       (this.favSubjects = stuff.favSubjects);
   }
   listsSubjects() {
-    this.favSubjects.forEach(function(cv) {
-      console.log(cv);
+    return this.favSubjects.forEach(function(item) {
+      console.log(item);
     });
   }
   PRAssignment(subj) {
@@ -89,6 +102,15 @@ class Student extends Person {
   }
   sprintChallenge(subj) {
     return `${this.name} has begun sprint challenge on ${subj}`;
+  }
+  canGraduate() {
+    if (this.grade > 70) {
+      return `${this.name} has graduated from Lambda School! Hurray!`;
+    } else {
+      return `${
+        this.name
+      } does not have a high enough grade. Graduation requires at least a 70% grade.`;
+    }
   }
 }
 
@@ -103,6 +125,17 @@ class Student extends Person {
 // standUp a method that takes in a slack channel and logs `{name} announces to {channel}, @channel standy times!​​​​​
 // debugsCode a method that takes in a student object and a subject and logs out {name} debugs {student.name}'s code on {subject}
 
+class ProjectManager extends Instructor {
+  constructor(stuff) {
+    super(stuff);
+    (this.gradClassName = stuff.gradClassName),
+      (this.favInstructor = stuff.favInstructor);
+  }
+  standUp(chan) {
+    return `${this.name} announces to ${chan}, "@channel standy times!"`;
+  }
+}
+
 // Stretch Problem
 
 // Extend the functionality of the Student by adding a prop called grade and setting it equal to a number between 1-100.
@@ -110,3 +143,90 @@ class Student extends Person {
 // Add a graduate method to a student.
 // This method, when called, will check the grade of the student and see if they're ready to graduate from Lambda School
 // If the student's grade is above a 70% let them graduate! Otherwise go back to grading their assignments to increase their score.
+
+const johnDoe = new Person({
+  name: "John",
+  age: 27,
+  location: "Tampa"
+});
+const janeDoe = new Person({
+  name: "Jane",
+  age: 25,
+  location: "Tampa"
+});
+console.log(johnDoe.speak());
+console.log(janeDoe.speak());
+
+const donny = new Student({
+  name: "DJ",
+  age: "25",
+  location: "California",
+  previousBackground: "Admin",
+  className: "WebPT 7",
+  favSubjects: ["JavaScript", "HTML"],
+  grade: 67,
+});
+const shelbs = new Student({
+  name: "Shelby",
+  age: "25",
+  location: "Arizona",
+  previousBackground: "Pharmacy",
+  className: "Web 21",
+  favSubjects: ["CSS", "Javascript"],
+  grade: 67,
+});
+console.log(donny.PRAssignment("HTML"));
+shelbs.listsSubjects();
+console.log(donny.sprintChallenge("JavaScript"));
+console.log(shelbs.canGraduate());
+
+const stanTheMan = new Instructor({
+  name: "Stan",
+  age: 36,
+  location: "Maui",
+  specialty: "JavaScript",
+  favLanguage: "JavaScript",
+  catchPhrase: "Juicy"
+});
+const randTheMan = new Instructor({
+  name: "Rand",
+  age: 32,
+  location: "Tulsa",
+  specialty: "CSS",
+  favLanguage: "React",
+  catchPhrase: "My grandpa was a dragon"
+});
+const francisTheMan = new Instructor({
+  name: "Francis",
+  age: 39,
+  location: "Brooklyn",
+  specialty: "HTML",
+  favLanguage: "C++",
+  catchPhrase: "Not today"
+});
+console.log(stanTheMan.demo("JavaScript"));
+console.log(randTheMan.grade(shelbs, "HTML"));
+console.log(francisTheMan.gradeAssignment(donny));
+
+const jakeHill = new ProjectManager({
+  name: "Jake",
+  age: 27,
+  location: "Spokane",
+  specialty: "Ruby",
+  favLanguage: "Redux",
+  catchPhrase: "Say goodnight Gracy",
+  gradClassName: "Web 17",
+  favInstructor: "Francis"
+});
+const lukeHoll = new ProjectManager({
+  name: "Luke",
+  age: 29,
+  location: "Bismarck",
+  specialty: "C",
+  favLanguage: "Python",
+  catchPhrase: "Get to the choppa",
+  gradClassName: "Web 2",
+  favInstructor: "Stan"
+});
+console.log(jakeHill.gradeAssignment(shelbs));
+console.log(lukeHoll.standUp("WebPT 11"));
